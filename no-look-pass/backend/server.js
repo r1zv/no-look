@@ -8,6 +8,8 @@ const emailRoutes = express.Router();
 
 let Email = require('./email.model')
 
+//martteeeeeeeeeeeeeeen
+
 app.use(cors());
 app.use(bodyParser.json());
 
