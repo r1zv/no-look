@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 export default class Email extends Component {
 	constructor(props) {
         super(props);
@@ -14,7 +15,7 @@ export default class Email extends Component {
         this.onChangeLastName = this.onChangeLastName.bind(this);   
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangeConsent = this.onChangeConsent.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);       
+        this.onSubmit = this.onSubmit.bind(this);    
     }
     render() {
         return (
@@ -102,7 +103,8 @@ export default class Email extends Component {
         this.setState({
             consent: e.target.value
         });
-    }    
+    }
+   
  	onSubmit(e) {
  		e.preventDefault();
         console.log(`Form submitted:`);
@@ -111,6 +113,18 @@ export default class Email extends Component {
         console.log(`Email: ${this.state.email}`);
         console.log(`Consent: ${this.state.consent}`);
         console.log(`Created_on: ${this.timeStamp()}`);
+        console.log(this.state.created_on);
+        let Email = {
+        	'first_name': this.state.first_name,
+        	'last_name': this.state.last_name,
+        	'email': this.state.email,
+        	'consent': this.state.consent,
+        	'created_on': 'today'
+        };
+
+        axios.post('http://localhost:4000/emails/add', Email)
+        	.then(res => console.log(res.data + ':'+Email));
+
         this.setState({
             first_name: '',
             last_name: '',
@@ -145,7 +159,9 @@ export default class Email extends Component {
 	  time[i] = "0" + time[i];
 	}
 	}
-
+        this.setState({
+        	created_on: date.join("/") + " " + time.join(":") + " " + suffix
+        })
 	// Return the formatted string
 	return date.join("/") + " " + time.join(":") + " " + suffix;
 	}

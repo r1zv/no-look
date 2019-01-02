@@ -6,11 +6,17 @@ const mongoose = require('mongoose');
 const PORT = 4000;
 const emailRoutes = express.Router();
 
-let Email = require('./emails.model.js')
+let Email = require('./email.model')
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/emails', emailRoutes);
+
+mongoose.connect('mongodb://127.0.0.1:27017/emails', {useNewUrlParser: true});
+const connection = mongoose.connection;
+
+connection.once('open', function() {
+    console.log("MongoDB database connection established successfully");
+})
 
 emailRoutes.route('/').get(function(req, res) {
 	Email.find(function(err, emails) {
@@ -59,13 +65,7 @@ emailRoutes.route('/update/:id').post(function(req, res) {
             });
     });
 });
-
-mongoose.connect('mongodb://127.0.0.1:27017/emails', {useNewUrlParser: true});
-const connection = mongoose.connection;
-
-connection.once('open', function() {
-    console.log("MongoDB database connection established successfully");
-})
+app.use('/emails', emailRoutes);
 app.listen(PORT, function() {
 	console.log("Server is running on Port: " + PORT);	
 })

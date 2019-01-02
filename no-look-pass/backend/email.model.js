@@ -11,11 +11,11 @@ let Email = new Schema({
     email: {
         type: String
     },
+    consent: {
+        type:String
+    },
     created_on: {
         type: String
-    },
-    consent: {
-        type:Boolean
     }
 });
 
